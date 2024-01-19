@@ -1,6 +1,6 @@
-const realEstateModel = require("../models/realEstateModel");
 const HttpStatusCode = require("../HTTP/HttpStatusCode");
 const Exceptions = require("../exceptions/Exceptions");
+const realEstateModel = require("../models/real-estate.model");
 
 const getAllRealEstate = async (req, res) => {
   const result = await realEstateModel.find({});

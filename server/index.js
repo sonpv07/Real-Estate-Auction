@@ -7,7 +7,8 @@ require("dotenv").config();
 const db = require("./config/database");
 
 // DEFINE ROUTER
-const realEstateRouter = require("./router/realEstateRouter");
+const realEstateRouter = require("./router/real-estate.router");
+const accountRouter = require("./router/account.router");
 
 // DEFINE EXPRESS
 const app = express();
@@ -19,6 +20,7 @@ const port = parseInt(process.env.PORT) || 5000;
 
 // DEFINE ROUTER LINK
 app.use("/", realEstateRouter);
+app.use("/", accountRouter);
 
 // CONNECT TO PORT
 app.listen(port, (req, res) => {
