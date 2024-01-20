@@ -13,4 +13,16 @@ const getAllRealEstate = async (req, res) => {
   }
 };
 
-module.exports = { getAllRealEstate };
+const getRealEstateByID = async (req, res) => {
+  const { _id } = req.body;
+  const result = await realEstateModel.findOne({ _id });
+  if (result.length > 0) {
+    res.status(HttpStatusCode.OK).json(result);
+  } else {
+    res
+      .status(HttpStatusCode.BAD_REQUEST)
+      .json({ error: Exceptions.FAIL_TO_GET_ITEM });
+  }
+};
+
+module.exports = { getAllRealEstate, getRealEstateByID };

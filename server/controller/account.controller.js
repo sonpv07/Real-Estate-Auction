@@ -2,9 +2,11 @@ const HTTP = require("../HTTP/HttpStatusCode");
 const accountModel = require("../models/account.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const EXCEPTIONS = require("../exceptions/Exceptions");
 const { validationResult } = require("express-validator");
-const validator = require("validator");
+const { sendVerifyEmail } = require("../utils/email");
+const path = require("path");
 
 // CREATE NEW TOKEN FOR USER
 const generateUserToken = (user) => {
@@ -47,9 +49,12 @@ const registerAccount = async (req, res) => {
       lastName,
       phoneNumber,
       password: hashedPassword,
+      emailToken: crypto.randomBytes(64).toString("hex"),
     });
 
     await account.save();
+
+    await sendVerifyEmail(account);
 
     const token = generateUserToken(account);
 
@@ -58,7 +63,7 @@ const registerAccount = async (req, res) => {
       accountInfor: account,
     });
   } catch (error) {
-    console.log(error);
+    res.status(HTTP.INTERNAL_SERVER_ERROR).json(error);
   }
 };
 
@@ -83,7 +88,6 @@ const loginAccount = async (req, res) => {
         error: EXCEPTIONS.WRONG_EMAIL_PASSWORD,
       });
 
-    // CREATE NEW TOKEN FOR USER
     generateUserToken(user);
 
     res.status(HTTP.OK).json({
@@ -91,8 +95,34 @@ const loginAccount = async (req, res) => {
       userInfor: user,
     });
   } catch (error) {
-    console.log(error);
+    res.status(HTTP.INTERNAL_SERVER_ERROR).json(error);
   }
 };
 
-module.exports = { registerAccount, loginAccount };
+const verifyEmail = async (req, res) => {
+  try {
+    const emailToken = req.query.emailToken;
+
+    if (!emailToken)
+      return res.status(HTTP.NOT_FOUND).json("Email Token not found!!");
+
+    const user = await accountModel.findOne({ emailToken });
+
+    if (user) {
+      user.emailToken = null;
+      user.isVerified = true;
+
+      await user.save();
+
+      const token = generateUserToken(user);
+
+      res.sendFile(path.join(__dirname, "./../views/verified.html"));
+    } else {
+      res.status(HTTP.NOT_FOUND).json("Verify email fail!!");
+    }
+  } catch (error) {
+    res, status(HTTP.INTERNAL_SERVER_ERROR).json(error);
+  }
+};
+
+module.exports = { registerAccount, loginAccount, verifyEmail };
