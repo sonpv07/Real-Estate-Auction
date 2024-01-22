@@ -74,9 +74,6 @@ export default function Auth(props) {
           Register
         </CustomTabPanel>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
     </Modal>
 
     // <Box sx={{ width: '100%' }}>
