@@ -25,7 +25,6 @@ const sendVerifyEmail = async (user) => {
       if (err) {
         console.log(err);
       } else {
-        console.log(mailOption.html);
         console.log("SEND SUCCESFULLY");
       }
     });
