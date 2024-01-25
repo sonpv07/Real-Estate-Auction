@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import SignIn from "./signIn/SignIn";
 import { Button, Modal } from "react-bootstrap";
+import Register from "./register/Register";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -71,7 +72,7 @@ export default function Auth(props) {
           <SignIn />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          Register
+          <Register/>
         </CustomTabPanel>
       </Modal.Body>
     </Modal>
