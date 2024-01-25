@@ -1,6 +1,13 @@
+import Banner from "./banner/Banner";
+import Offer from "./offer/Offer";
+
 const Home = () => {
     return (
-        <div>Home page</div>
+        <div className="home-container">
+            <Banner/>
+            <Offer/>
+            
+        </div>
     )
 }
 
