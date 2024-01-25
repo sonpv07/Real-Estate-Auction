@@ -9,7 +9,7 @@ const auctionSchema = mongoose.Schema(
     description: { type: String },
     status: {
       type: String,
-      enum: { values: ["Not Start", "In Auction", "End"] },
+      enum: { values: ["Wait For Approval", "Not Start", "In Auction", "End"] },
     },
     buyNowPrice: { type: Number },
     realEstateID: { type: mongoose.Types.ObjectId },

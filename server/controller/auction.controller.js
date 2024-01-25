@@ -120,9 +120,38 @@ const createAuction = async (req, res) => {
   }
 };
 
+const removeAuction = async (req, res) => {
+  try {
+    const _id = req.params.id;
+
+    const checkRemoveAuction = await auctionModel.deleteOne({ _id });
+
+    if (checkRemoveAuction.deletedCount > 0) {
+      const checkRemoveList = await joinListMemberModel.deleteOne({
+        auctionID: _id,
+      });
+
+      if (checkRemoveList.deletedCount > 0) {
+        res.status(HTTP.OK).json({
+          success: true,
+          response: checkRemoveAuction,
+        });
+      }
+    } else {
+      res.status(HTTP.BAD_REQUEST).json({
+        success: false,
+        error: EXCEPTIONS.FAIL_TO_DELETE_ITEM,
+      });
+    }
+  } catch (error) {
+    res.status(HTTP.INTERNAL_SERVER_ERROR).json(error);
+  }
+};
+
 module.exports = {
   getAuctionByID,
   getAuctionByStatus,
   getAuctionByName,
   createAuction,
+  removeAuction,
 };

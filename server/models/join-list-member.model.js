@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const joinListMemberSchema = mongoose.Schema({
   memberID: {
-    type: [{ type: mongoose.Types.ObjectId }],
+    type: [{ type: mongoose.Types.ObjectId, ref: "Member" }],
     default: [],
   },
   auctionID: { type: mongoose.Types.ObjectId },

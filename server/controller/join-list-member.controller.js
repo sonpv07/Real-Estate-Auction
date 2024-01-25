@@ -62,10 +62,10 @@ const addMemberToList = async (req, res) => {
     if (joinList) {
       const checkUpdate = await joinListMemberModel.updateOne(
         { _id: joinList._id },
-        { $push: { memberID: memberID } }
+        { $addToSet: { memberID: memberID } }
       );
 
-      if (!checkUpdate) {
+      if (!checkUpdate.modifiedCount > 0) {
         res.status(HTTP.BAD_REQUEST).json({
           success: false,
           error: EXCEPTIONS.FAIL_TO_UPDATE_ITEM,
